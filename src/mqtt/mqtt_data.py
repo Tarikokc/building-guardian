@@ -5,12 +5,14 @@ import sqlite3
 import requests
 from datetime import datetime
 
+
 DB_FILE = "mqtt_data.db"
 WEBHOOK = "https://hook.eu1.make.com/jyu9okfy26gbdns7fevtg16hyy65hq54"
 TEMP_MAX = 25
 HUM_MAX = 60
 BROKER = "172.20.10.3"
 PORT = 1883
+
 
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
@@ -23,9 +25,11 @@ c.execute('''CREATE TABLE IF NOT EXISTS mesures
               pir INTEGER)''')
 conn.commit()
 
+
 def on_connect(client, userdata, flags, rc):
     print(f"Connecté MQTT (code {rc}) → BDD + Alertes ON")
     client.subscribe("#")
+
 
 def on_message(client, userdata, msg):
     try:
@@ -50,20 +54,42 @@ def on_message(client, userdata, msg):
     except Exception as e:
         print(f"Erreur: {e}")
 
+
 def send_alert(alerte, valeur, seuil, topic):
+    salle = topic.split('/')[-1] if '/' in topic else "salle1"
+    
+    label = "Température" if alerte == "TEMP" else "Humidité"
+    unite = "°C" if alerte == "TEMP" else "%"
+    
+    subject = f"[ALERTE {alerte}] Seuil dépassé – {salle}"
+    body = (
+        f"⚠️ Alerte Building Guardian\n\n"
+        f"Salle     : {salle}\n"
+        f"Capteur   : {label}\n"
+        f"Valeur    : {valeur}{unite}\n"
+        f"Seuil max : {seuil}{unite}\n"
+        f"Topic MQTT: {topic}\n"
+        f"Horodatage: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n\n"
+        f"Le seuil de {seuil}{unite} a été dépassé ({valeur}{unite} mesuré)."
+    )
+    
     payload = {
         "alerte": alerte,
-        "salle": topic.split('/')[-1] if '/' in topic else "salle1",
+        "salle": salle,
         "valeur": valeur,
         "seuil": seuil,
-        "topic": topic
+        "topic": topic,
+        "subject": subject,   
+        "body": body           
     }
     resp = requests.post(WEBHOOK, json=payload)
     print(f"{alerte} {valeur}>{seuil} → Make: {resp.status_code}")
 
+
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
+
 
 print("MQTT → BDD + Alertes Make.com")
 client.connect(BROKER, PORT, 60)
