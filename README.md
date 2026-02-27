@@ -1,10 +1,12 @@
-# 🏢 Building Guardian
+# Building Guardian
 
 **Système IoT de surveillance de bâtiments** avec ESP8266, capteurs DHT11/PIR, MQTT, alertes Make.com et visualisation Grafana.
 
+![Grafana Time Series](src/grafana/grafana_graph.png)
+
 ---
 
-## 📋 Table des matières
+## Table des matières
 
 - [Vue d'ensemble](#-vue-densemble)
 - [Architecture](#-architecture)
@@ -17,7 +19,7 @@
 
 ---
 
-## 🎯 Vue d'ensemble
+##  Vue d'ensemble
 
 Building Guardian est un système de monitoring temps réel pour espaces intérieurs qui surveille :
 - **Température** (°C)
@@ -28,7 +30,7 @@ Les données sont collectées via MQTT, stockées dans SQLite, et des alertes au
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```
 ┌─────────────────┐
@@ -65,7 +67,7 @@ Les données sont collectées via MQTT, stockées dans SQLite, et des alertes au
 
 ---
 
-## 🛠 Matériel requis
+## Matériel requis
 
 ### ESP8266 (par salle)
 - **1x ESP8266** (NodeMCU, Wemos D1 Mini)
@@ -79,7 +81,7 @@ Les données sont collectées via MQTT, stockées dans SQLite, et des alertes au
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### 1. Raspberry Pi / Serveur
 
@@ -108,7 +110,7 @@ python3 mqtt_data.py
 - PubSubClient
 - DHT sensor library
 
-**Configuration** (`arduino/code_final_mqtt/sketch_feb26c.ino`) :
+**Configuration** (`arduino/test_sensor.ino`) :
 ```cpp
 const char* ssid = "VotreWiFi";
 const char* password = "VotreMotDePasse";
@@ -119,7 +121,7 @@ const char* mqtt_server = "192.168.1.X"; // IP du Raspberry Pi
 
 ---
 
-## 🔧 Configuration Make.com
+## Configuration Make.com
 
 ### Créer un scénario d'alerte email
 
@@ -179,7 +181,7 @@ Vérifiez votre email → alerte reçue ✅
 
 ---
 
-## 📘 Documentation technique
+## Documentation technique
 
 ### Format MQTT
 
@@ -219,7 +221,7 @@ HUM_MAX = 60   # %
 
 - **`mqtt_data.py`** : Subscriber MQTT + BDD + Alertes
 - **`run_grafana.sh`** : Lancement Grafana (Docker)
-- **`arduino/code_final_mqtt/`** : Code ESP8266
+- **`arduino/`** : Code ESP8266
 
 ---
 
@@ -320,17 +322,18 @@ Timestamp : 2026-02-27T10:42:15
 
 ---
 
-## 📄 Licence
+## Licence
 
 MIT License - Libre d'utilisation et modification.
 
-## 👤 Auteur
+## Auteur
 
-**Tarik** - https://github.com/Tarikokc
+**Tarik**  - https://github.com/Tarikokc
+**Alyssa** - https://github.com/Lylyss97x
 
 ---
 
-## 🔗 Liens utiles
+## Liens utiles
 
 - Documentation MQTT : https://mqtt.org/
 - Paho Python : https://eclipse.dev/paho/index.php?page=clients/python/index.php
