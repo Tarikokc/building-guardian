@@ -133,7 +133,7 @@ const char* mqtt_server = "192.168.1.X"; // IP du Raspberry Pi
    ```python
    WEBHOOK = "https://hook.eu1.make.com/VOTRE_WEBHOOK_ID"
    ```
-
+![alt text](image.png)
 #### Étape 2 : Parser JSON
 1. **Ajouter module** : `JSON → Parse JSON`
 2. **Data structure** :
@@ -175,7 +175,7 @@ const char* mqtt_server = "192.168.1.X"; // IP du Raspberry Pi
 curl -X POST -H "Content-Type: application/json" \
   -d '{"alerte":"TEMP","salle":"test","valeur":27,"seuil":25,"topic":"test"}' \
   https://hook.eu1.make.com/VOTRE_WEBHOOK_ID
-```
+```****
 
 Vérifiez votre email → alerte reçue ✅
 
